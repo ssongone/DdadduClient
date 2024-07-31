@@ -1,4 +1,4 @@
-﻿namespace MauiApp1
+﻿namespace DdadduBot
 {
     public partial class MainPage : ContentPage
     {

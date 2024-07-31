@@ -8,4 +8,9 @@ public partial class DetailPage : ContentPage
 		InitializeComponent();
 		BindingContext = item;
 	}
+
+	public DetailPage()
+	{
+        InitializeComponent();
+    }
 }

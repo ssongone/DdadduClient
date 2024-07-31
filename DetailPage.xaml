@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:DdadduBot.ViewModels"
              x:Class="DdadduBot.DetailPage">
 
+    <ContentPage.BindingContext>
+        <viewModels:DetailViewModel />
+    </ContentPage.BindingContext>
+
     <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-        <Label Text="{Binding Title}" FontSize="24" />
-        <Label Text="{Binding Status}" FontSize="18" />
+        <Button Text="Load Items" Command="{Binding LoadItemsCommand}" />
+
+        <ListView ItemsSource="{Binding Items}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal" Padding="10">
+                            <Label Text="{Binding Name}" VerticalOptions="Center" FontSize="24"/>
+                            <Label Text="{Binding Url}" VerticalOptions="Center" FontSize="18"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </StackLayout>
 
 </ContentPage>

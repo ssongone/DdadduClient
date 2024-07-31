@@ -17,7 +17,7 @@ namespace DdadduBot
             var viewModel = BindingContext as MyViewModel;
             int index = viewModel.Items.IndexOf(item)+1;
 
-            await Navigation.PushAsync(new DetailPage(item));
+            await Navigation.PushAsync(new DetailPage());
         }
 
     }
