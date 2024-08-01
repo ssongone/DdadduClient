@@ -68,7 +68,10 @@
 	  <MauiXaml Update="DetailPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Hi.xaml">
+	  <MauiXaml Update="ChoiceMenuPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="ScraperMain.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
@@ -81,6 +84,12 @@
 	  <Reference Include="ScraperDll">
 	    <HintPath>..\ScraperDll\bin\Debug\net8.0\ScraperDll.dll</HintPath>
 	  </Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="ChoiceMenuPage.xaml.cs">
+	    <DependentUpon>ChoiceMenuPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

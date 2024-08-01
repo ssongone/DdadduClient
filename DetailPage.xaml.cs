@@ -1,5 +1,6 @@
 namespace DdadduBot;
 using DdadduBot.ViewModels;
+using ScraperDll;
 
 public partial class DetailPage : ContentPage
 {
@@ -13,4 +14,11 @@ public partial class DetailPage : ContentPage
 	{
         InitializeComponent();
     }
+
+	public DetailPage(bool isBook, int option)
+	{
+		InitializeComponent();
+		BindingContext = new DetailViewModel(isBook, option);
+	}
+
 }

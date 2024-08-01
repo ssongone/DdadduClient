@@ -16,8 +16,11 @@
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Orientation="Horizontal" Padding="10">
-                            <Label Text="{Binding Name}" VerticalOptions="Center" FontSize="24"/>
-                            <Label Text="{Binding Url}" VerticalOptions="Center" FontSize="18"/>
+                            <Label Text="{Binding Index}" VerticalOptions="Center" FontSize="12" WidthRequest="30" HorizontalOptions="Start" />
+
+                            <Label Text="{Binding Name}" VerticalOptions="Center" FontSize="12" HorizontalOptions="Start" />
+
+                            <Label Text="{Binding Status}" VerticalOptions="Center" FontSize="12" HorizontalOptions="EndAndExpand" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

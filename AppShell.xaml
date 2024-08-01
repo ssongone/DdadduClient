@@ -8,23 +8,12 @@
     Title="DdadduBot">
 
     <TabBar>
-        <Tab Title="Home" >
-            <ShellContent ContentTemplate="{DataTemplate local:Hi}" />
+        <Tab Title="가져오기" >
+            <ShellContent ContentTemplate="{DataTemplate local:ScraperMain}" />
         </Tab>
-        <Tab Title="Settings">
+        <Tab Title="업로드하기">
             <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
         </Tab>
     </TabBar>
-    
-    <ShellContent
-        Title="Hi"
-        ContentTemplate="{DataTemplate local:Hi}"
-        Route="Hi" />
-    
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
 
 </Shell>

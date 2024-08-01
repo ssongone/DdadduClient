@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DdadduBot.ScraperMain">
+
+    <VerticalStackLayout
+        VerticalOptions="Center" 
+        HorizontalOptions="Center"
+        Spacing="20">
+
+        <Label Text="Make Your Choice"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               Margin="0,0,0,20"/>
+
+        <Button Text="Book"
+                WidthRequest="200"
+                HorizontalOptions="Center"
+                Clicked="OnButtonClicked"/>
+
+        <Button Text="Magazine"
+            WidthRequest="200" 
+            Clicked="OnButtonClicked2"/>
+
+    </VerticalStackLayout>
+</ContentPage>
