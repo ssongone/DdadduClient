@@ -8,23 +8,58 @@ using ScraperDll.Entity;
 
 namespace DdadduBot.ViewModels
 {
+
+    public class PublicationSummaryDto
+    {
+        public int Number { get; set; }
+        public string Status { get; set; }
+        public PublicationSummary PublicationSummary { get; set; }
+
+        public PublicationSummaryDto() { }
+
+        public PublicationSummaryDto(int number, PublicationSummary publication) 
+        { 
+            Number = number;
+            Status = "중복";
+            PublicationSummary = publication;
+        }
+    }
+
     public class DetailViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<PublicationSummary> Items { get; set; }
+        private static readonly Dictionary<(bool, int), DetailViewModel> _instances = new();
+        public static DetailViewModel GetInstance(bool isBook, int option)
+        {
+            if (!_instances.ContainsKey((isBook, option)))
+            {
+                _instances[(isBook, option)] = new DetailViewModel(isBook, option);
+            }
+            return _instances[(isBook, option)];
+        }
+
+        public DetailViewModel()
+        {}
+
+        public ObservableCollection<PublicationSummaryDto> Items { get; set; }
         public ICommand LoadItemsCommand { get; }
 
         public bool IsBook { get; }
         public int Option { get; }
 
-        public DetailViewModel()
+        private bool isLoading;
+        public bool IsLoading
         {
-            Items = new ObservableCollection<PublicationSummary>();
-            LoadItemsCommand = new Command(LoadItems);
+            get => isLoading;
+            set
+            {
+                isLoading = value;
+                OnPropertyChanged();
+            }
         }
 
-        public DetailViewModel(bool isBook, int option)
+        private DetailViewModel(bool isBook, int option)
         {
-            Items = new ObservableCollection<PublicationSummary>();
+            Items = new ObservableCollection<PublicationSummaryDto>();
             LoadItemsCommand = new Command(LoadItems);
             IsBook = isBook;
             Option = option;
@@ -32,13 +67,16 @@ namespace DdadduBot.ViewModels
 
         private async void LoadItems()
         {
+            IsLoading = true;
+
             Items.Clear();
 
             var newItems = await GetNewItems();
-            foreach (var item in newItems)
+            for (int i = 0; i < newItems.Count; i++)
             {
-                Items.Add(item);
+                Items.Add(new PublicationSummaryDto(i+1, newItems[i]));
             }
+            IsLoading = false;
         }
 
         private async Task<List<PublicationSummary>> GetNewItems()
@@ -46,10 +84,8 @@ namespace DdadduBot.ViewModels
             ListUrlPolicy policy = IsBook ? new BookUrlPolicy() : new MagazineUrlPolicy();
             Scraper scraper = new Scraper(policy);
             Debug.WriteLine("✅✅✅✅✅✅✅✅✅✅");
-            Debug.WriteLine(policy.ToString());
-            Debug.WriteLine(Option);
             List<PublicationSummary> list = await scraper.ScrapeRankingPage(Option);
-            Debug.WriteLine(list[0].Name);
+            Debug.WriteLine(list.Count);
             return list;
         }
 

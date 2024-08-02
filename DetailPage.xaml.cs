@@ -18,7 +18,7 @@ public partial class DetailPage : ContentPage
 	public DetailPage(bool isBook, int option)
 	{
 		InitializeComponent();
-		BindingContext = new DetailViewModel(isBook, option);
+		BindingContext = DetailViewModel.GetInstance(isBook, option);
 	}
 
 }

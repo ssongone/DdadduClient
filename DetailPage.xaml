@@ -10,18 +10,24 @@
 
     <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
         <Button Text="Load Items" Command="{Binding LoadItemsCommand}" />
-
+        
+        <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
+        
         <ListView ItemsSource="{Binding Items}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout Orientation="Horizontal" Padding="10">
-                            <Label Text="{Binding Index}" VerticalOptions="Center" FontSize="12" WidthRequest="30" HorizontalOptions="Start" />
+                        <Grid Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                            <Label Text="{Binding Name}" VerticalOptions="Center" FontSize="12" HorizontalOptions="Start" />
-
-                            <Label Text="{Binding Status}" VerticalOptions="Center" FontSize="12" HorizontalOptions="EndAndExpand" />
-                        </StackLayout>
+                            <Label Text="{Binding Number}" VerticalOptions="Center" FontSize="12" Grid.Column="0" />
+                            <Label Text="{Binding PublicationSummary.Name}" FontSize="12" Grid.Column="1" />
+                            <Label Text="{Binding Status}" VerticalOptions="Center" FontSize="12" Grid.Column="2" HorizontalOptions="End" />
+                        </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
