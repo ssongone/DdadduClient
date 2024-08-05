@@ -9,7 +9,7 @@
     </ContentPage.BindingContext>
 
     <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-        <Button Text="Load Items" Command="{Binding LoadItemsCommand}" />
+        <Button x:Name="loadItemsButton" Text="Load Items" Command="{Binding LoadItemsCommand}" />
         
         <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
         

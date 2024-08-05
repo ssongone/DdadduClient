@@ -1,31 +1,31 @@
 ﻿using ScraperDll.Entity;
 using ScraperDll;
+using System.Collections.Concurrent;
 
 namespace DdadduBot.Service
 {
     public class ScraperServiceManager
     {
-        private static readonly Dictionary<(bool, int), ScraperService> _services = new();
+        private static readonly ConcurrentDictionary<(bool, int), ScraperService> _services = new();
 
         public static ScraperService GetService(bool isBook, int option)
         {
             var key = (isBook, option);
-
-            if (!_services.ContainsKey(key))
-            {
-                _services[key] = new ScraperService(isBook, option);
-            }
-
-            return _services[key];
+            return _services.GetOrAdd(key, _ => new ScraperService(isBook, option));
         }
+
+        public static bool ServiceExists(bool isBook, int option)
+        {
+            return _services.ContainsKey((isBook, option));
+        }
+
+
         public static void RemoveService(bool isBook, int option)
         {
             var key = (isBook, option);
-            if (_services.ContainsKey(key))
-            {
-                _services.Remove(key);
-            }
+            _services.TryRemove(key, out _);
         }
+
     }
 
     public class ScraperService

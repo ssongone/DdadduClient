@@ -3,12 +3,12 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using DdadduBot.Service;
 using ScraperDll;
 using ScraperDll.Entity;
 
 namespace DdadduBot.ViewModels
 {
-
     public class PublicationSummaryDto
     {
         public int Number { get; set; }
@@ -37,12 +37,8 @@ namespace DdadduBot.ViewModels
             return _instances[(isBook, option)];
         }
 
-        public DetailViewModel()
-        {}
-
         public ObservableCollection<PublicationSummaryDto> Items { get; set; }
         public ICommand LoadItemsCommand { get; }
-
         public bool IsBook { get; }
         public int Option { get; }
 
@@ -56,6 +52,7 @@ namespace DdadduBot.ViewModels
                 OnPropertyChanged();
             }
         }
+        public DetailViewModel() { }
 
         private DetailViewModel(bool isBook, int option)
         {
@@ -67,8 +64,13 @@ namespace DdadduBot.ViewModels
 
         private async void LoadItems()
         {
-            IsLoading = true;
+            if (ScraperServiceManager.ServiceExists(IsBook, Option))
+            {
+                await Application.Current.MainPage.DisplayAlert("경고", "현재 작업이 진행 중입니다.", "확인");
+                return;
+            }
 
+            IsLoading = true;
             Items.Clear();
 
             var newItems = await GetNewItems();
@@ -76,17 +78,14 @@ namespace DdadduBot.ViewModels
             {
                 Items.Add(new PublicationSummaryDto(i+1, newItems[i]));
             }
+
             IsLoading = false;
+            ScraperServiceManager.RemoveService(IsBook, Option);
         }
 
         private async Task<List<PublicationSummary>> GetNewItems()
         {
-            ListUrlPolicy policy = IsBook ? new BookUrlPolicy() : new MagazineUrlPolicy();
-            Scraper scraper = new Scraper(policy);
-            Debug.WriteLine("✅✅✅✅✅✅✅✅✅✅");
-            List<PublicationSummary> list = await scraper.ScrapeRankingPage(Option);
-            Debug.WriteLine(list.Count);
-            return list;
+            return await ScraperServiceManager.GetService(IsBook, Option).GetPublicationSummaries();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
