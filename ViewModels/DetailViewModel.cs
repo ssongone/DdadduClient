@@ -42,13 +42,13 @@ namespace DdadduBot.ViewModels
         public bool IsBook { get; }
         public int Option { get; }
 
-        private bool isLoading;
-        public bool IsLoading
+        private bool isRunning;
+        public bool IsRunning
         {
-            get => isLoading;
+            get => isRunning;
             set
             {
-                isLoading = value;
+                isRunning = value;
                 OnPropertyChanged();
             }
         }
@@ -57,35 +57,45 @@ namespace DdadduBot.ViewModels
         private DetailViewModel(bool isBook, int option)
         {
             Items = new ObservableCollection<PublicationSummaryDto>();
-            LoadItemsCommand = new Command(LoadItems);
+            LoadItemsCommand = new Command(Run);
             IsBook = isBook;
             Option = option;
         }
 
-        private async void LoadItems()
+        private async void Run()
         {
-            if (ScraperServiceManager.ServiceExists(IsBook, Option))
+            if (IsRunning)
             {
                 await Application.Current.MainPage.DisplayAlert("경고", "현재 작업이 진행 중입니다.", "확인");
                 return;
             }
 
-            IsLoading = true;
-            Items.Clear();
+            IsRunning = true;
+            // 1. 리스트 로드
+            LoadItems();
 
+            // 2. 중복 확인 (서버 연동)
+            // 3. 상품디테일 가져오기
+            // 4. 사진 확장자 변경 (서버 연동)
+            // 5. 엑셀파일화
+            
+
+            IsRunning = false;
+        }
+
+        private async void LoadItems()
+        {
+            Items.Clear();
             var newItems = await GetNewItems();
             for (int i = 0; i < newItems.Count; i++)
             {
                 Items.Add(new PublicationSummaryDto(i+1, newItems[i]));
             }
-
-            IsLoading = false;
-            ScraperServiceManager.RemoveService(IsBook, Option);
         }
 
         private async Task<List<PublicationSummary>> GetNewItems()
         {
-            return await ScraperServiceManager.GetService(IsBook, Option).GetPublicationSummaries();
+            return await new ScraperService(IsBook, Option).GetPublicationSummaries();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
