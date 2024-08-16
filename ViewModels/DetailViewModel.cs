@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using DdadduBot.Service;
-using ScraperDll;
 using ScraperDll.Entity;
 
 namespace DdadduBot.ViewModels
@@ -20,7 +19,7 @@ namespace DdadduBot.ViewModels
         public PublicationSummaryDto(int number, PublicationSummary publication) 
         { 
             Number = number;
-            Status = "중복";
+            Status = "";
             PublicationSummary = publication;
         }
     }
@@ -37,6 +36,7 @@ namespace DdadduBot.ViewModels
             return _instances[(isBook, option)];
         }
 
+        private ScraperService _scraperService;
         public ObservableCollection<PublicationSummaryDto> Items { get; set; }
         public ICommand LoadItemsCommand { get; }
         public bool IsBook { get; }
@@ -52,6 +52,18 @@ namespace DdadduBot.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        private string statusMessage;
+        public string StatusMessage
+        {
+            get => statusMessage;
+            set
+            {
+                statusMessage = value;
+                OnPropertyChanged();
+            }
+        }
+
         public DetailViewModel() { }
 
         private DetailViewModel(bool isBook, int option)
@@ -60,6 +72,7 @@ namespace DdadduBot.ViewModels
             LoadItemsCommand = new Command(Run);
             IsBook = isBook;
             Option = option;
+            _scraperService = new ScraperService(isBook, option);
         }
 
         private async void Run()
@@ -72,30 +85,40 @@ namespace DdadduBot.ViewModels
 
             IsRunning = true;
             // 1. 리스트 로드
-            LoadItems();
+            StatusMessage = "목록을 가져오는 중";
+            var summaries = await LoadItems();
 
             // 2. 중복 확인 (서버 연동)
-            // 3. 상품디테일 가져오기
-            // 4. 사진 확장자 변경 (서버 연동)
-            // 5. 엑셀파일화
-            
 
+            // 3. 상품디테일 가져오기
+            StatusMessage = "상세 정보를 가져오는 중";
+            var publications = await _scraperService.GetPublications(summaries);
+
+            // 4. 사진 확장자 변경 (서버 연동)
+
+            // 5. 엑셀파일화
+            StatusMessage = "엑셀 파일로 바꾸는 중";
+            await Task.Run(() => _scraperService.ExportPublications(publications));
+
+            StatusMessage = "✅✅✅";
             IsRunning = false;
         }
 
-        private async void LoadItems()
+        private async Task<List<PublicationSummary>> LoadItems()
         {
             Items.Clear();
             var newItems = await GetNewItems();
             for (int i = 0; i < newItems.Count; i++)
             {
                 Items.Add(new PublicationSummaryDto(i+1, newItems[i]));
+                Debug.WriteLine("🎂" +newItems[i].Title);
             }
+            return newItems;
         }
 
         private async Task<List<PublicationSummary>> GetNewItems()
         {
-            return await new ScraperService(IsBook, Option).GetPublicationSummaries();
+            return await _scraperService.GetPublicationSummaries();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

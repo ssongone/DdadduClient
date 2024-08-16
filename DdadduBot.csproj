@@ -62,32 +62,32 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="NPOI" Version="2.7.1" />
 	</ItemGroup>
 
   <ItemGroup>
-	  <MauiXaml Update="DetailPage.xaml">
+	  <MauiXaml Update="View\DetailPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="ChoiceMenuPage.xaml">
+	  <MauiXaml Update="View\ChoiceMenuPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="ScraperMain.xaml">
+	  <MauiXaml Update="View\ScraperMain.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="View\" />
+	  <MauiXaml Update="View\SettingPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Reference Include="ScraperDll">
-	    <HintPath>..\ScraperDll\bin\Debug\net8.0\ScraperDll.dll</HintPath>
+	    <HintPath>..\ScraperDll\src\bin\Debug\net8.0\ScraperDll.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="ChoiceMenuPage.xaml.cs">
+	  <Compile Update="View\ChoiceMenuPage.xaml.cs">
 	    <DependentUpon>ChoiceMenuPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>

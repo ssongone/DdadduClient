@@ -15,13 +15,16 @@
                Margin="0,0,0,20"/>
 
         <Button Text="Book"
+                BackgroundColor="#4CAF50"
                 WidthRequest="200"
                 HorizontalOptions="Center"
                 Clicked="OnButtonClicked"/>
 
         <Button Text="Magazine"
-            WidthRequest="200" 
-            Clicked="OnButtonClicked2"/>
+                BackgroundColor="#4CAF50"
+                WidthRequest="200" 
+                HorizontalOptions="Center"
+                Clicked="OnButtonClicked2"/>
 
     </VerticalStackLayout>
 </ContentPage>

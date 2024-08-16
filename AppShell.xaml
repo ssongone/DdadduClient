@@ -14,6 +14,9 @@
         <Tab Title="업로드하기">
             <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
         </Tab>
+        <Tab Title="설정">
+            <ShellContent ContentTemplate="{DataTemplate local:SettingPage}" />
+        </Tab>
     </TabBar>
 
 </Shell>

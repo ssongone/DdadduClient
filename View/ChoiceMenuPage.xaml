@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewModels="clr-namespace:DdadduBot.ViewModels"
+             x:Class="DdadduBot.ChoiceMenuPage"
+             Padding="10">
+
+    <ContentPage.BindingContext>
+        <viewModels:MenuViewModel />
+    </ContentPage.BindingContext>
+
+    <StackLayout Spacing="10">
+        <Label Text="Menu" 
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               Margin="0,0,0,20"/>
+
+        <ListView ItemsSource="{Binding Items}" 
+                  SeparatorVisibility="Default" 
+                  HasUnevenRows="True"
+                  VerticalOptions="FillAndExpand">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Frame Padding="10" 
+                               Margin="10,5" 
+                               CornerRadius="10" 
+                               BackgroundColor="#f0f0f0"
+                               HasShadow="True">
+                            <Grid ColumnDefinitions="*, Auto" VerticalOptions="CenterAndExpand">
+                                <Label Text="{Binding Title}" 
+                                       FontSize="18" 
+                                       VerticalOptions="Center" 
+                                       HorizontalOptions="Start" 
+                                       Grid.Column="0"/>
+                                <Button Text="{Binding Status}" 
+                                        FontSize="16" 
+                                        VerticalOptions="Center" 
+                                        HorizontalOptions="End" 
+                                        BackgroundColor="#4CAF50"
+                                        TextColor="White"
+                                        CornerRadius="5"
+                                        Clicked="ShowDetail" 
+                                        Grid.Column="1"/>
+                            </Grid>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+
+</ContentPage>

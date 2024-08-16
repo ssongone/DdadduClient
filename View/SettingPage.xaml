@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DdadduBot.SettingPage"
+             xmlns:local="clr-namespace:DdadduBot.ViewModels">
+
+    <ContentPage.BindingContext>
+        <local:SettingsViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        
+        <StackLayout Padding="20" Spacing="15" HorizontalOptions="Center" WidthRequest="300">
+            <Label Text="설정하기"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Start"
+                   Margin="0,0,0,20" />
+
+            <Label Text="기본 이미지 주소"
+                   FontAttributes="Bold"
+                   FontSize="18"
+                   VerticalOptions="Center" />
+            <Entry Text="{Binding DefaultImageUrl}" 
+                   Placeholder="이미지 주소를 입력하세요"
+                   FontSize="16"
+                   VerticalOptions="Center" />
+
+            <Label Text="책 마진"
+                   FontAttributes="Bold"
+                   FontSize="18"
+                   VerticalOptions="Center" />
+            <Entry Keyboard="Numeric"
+                   Text="{Binding BookMargin}"
+                   Placeholder="책 마진을 입력하세요"
+                   FontSize="16"
+                   VerticalOptions="Center" />
+
+            <Label Text="잡지 마진"
+                   FontAttributes="Bold"
+                   FontSize="18"
+                   VerticalOptions="Center" />
+            <Entry Keyboard="Numeric"
+                   Text="{Binding MagazineMargin}"
+                   Placeholder="잡지 마진을 입력하세요"
+                   FontSize="16"
+                   VerticalOptions="Center" />
+
+            <Button Text="저장"
+                    Command="{Binding SaveCommand}"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="10"
+                    HeightRequest="50"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="End" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
