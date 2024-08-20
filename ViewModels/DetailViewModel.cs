@@ -37,6 +37,8 @@ namespace DdadduBot.ViewModels
         }
 
         private ScraperService _scraperService;
+        private ApiRequestService _apiRequestService;
+
         public ObservableCollection<PublicationSummaryDto> Items { get; set; }
         public ICommand LoadItemsCommand { get; }
         public bool IsBook { get; }
