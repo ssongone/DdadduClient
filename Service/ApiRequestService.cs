@@ -1,41 +1,61 @@
 ﻿using ScraperDll.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Net.Http;
 
 namespace DdadduBot.Service
 {
     public class ApiRequestService
     {
         private static readonly HttpClient _httpClient = new HttpClient();
-        public List<Publication> Publications { get; set; }
 
-        public ApiRequestService(List<Publication> publications)
+        public ApiRequestService()
         {
-            Publications = publications;
+            _httpClient.Timeout = TimeSpan.FromMinutes(10);
         }
-        public string CreateFileUrlsBody()
+        public string CreateFileUrlsBody(List<Publication> publications)
         {
             var fileUrls = new List<string>();
 
-            foreach (var publication in Publications)
+            for (int i = 0 ; i < publications.Count; i++)
             {
-                fileUrls.Add($"fileUrls={publication.MainImageUrl}");
+                fileUrls.Add($"fileUrls={publications[i].MainImageUrl}");
             }
 
             return string.Join("&", fileUrls);
         }
 
-        public async Task<HttpResponseMessage> SendRequestAsync(HttpRequestMessage request)
+        public async Task<bool> UpdateMainImageUrls(List<Publication> publications)
         {
-            return await _httpClient.SendAsync(request);
+            var response = await UploadFilesAsync(publications);
+
+            Debug.Write(response);
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+
+                var urls = JsonConvert.DeserializeObject<UrlsResponse>(jsonResponse).Urls;
+
+                for (int i = 0; i < urls.Count; i++)
+                {
+                    publications[i].MainImageUrl = urls[i];
+                }
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
+
+
 
         public async Task<HttpResponseMessage> UploadFilesAsync(List<Publication> publications)
         {
-            var body = CreateFileUrlsBody();
+            var body = CreateFileUrlsBody(publications);
 
             var request = new HttpRequestMessage(HttpMethod.Post, "http://donothing.store/api/upload")
             {
@@ -43,6 +63,17 @@ namespace DdadduBot.Service
             };
 
             return await _httpClient.SendAsync(request);
+        }
+
+        public class UrlsResponse
+        {
+            public List<string> Urls { get; set; }
+        }
+
+
+        public async Task  ValidatePublications(List<PublicationSummary> summaries)
+        {
+
         }
     }
 }

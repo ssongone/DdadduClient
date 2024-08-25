@@ -37,7 +37,7 @@ namespace DdadduBot.ViewModels
         }
 
         private ScraperService _scraperService;
-        private ApiRequestService _apiRequestService;
+        private ApiRequestService _apiRequestService = new ApiRequestService();
 
         public ObservableCollection<PublicationSummaryDto> Items { get; set; }
         public ICommand LoadItemsCommand { get; }
@@ -91,12 +91,22 @@ namespace DdadduBot.ViewModels
             var summaries = await LoadItems();
 
             // 2. 중복 확인 (서버 연동)
+            StatusMessage = "목록을 확인하는 중";
+            await _apiRequestService.ValidatePublications(Items);
 
             // 3. 상품디테일 가져오기
             StatusMessage = "상세 정보를 가져오는 중";
             var publications = await _scraperService.GetPublications(summaries);
 
             // 4. 사진 확장자 변경 (서버 연동)
+            StatusMessage = "사진 확장자를 변경하는 중";
+            var success = await _apiRequestService.UpdateMainImageUrls(publications);
+            if (!success)
+            {
+                StatusMessage = "오류 발생 🙊 ";
+                IsRunning = false;
+                return;
+            }
 
             // 5. 엑셀파일화
             StatusMessage = "엑셀 파일로 바꾸는 중";
@@ -113,7 +123,6 @@ namespace DdadduBot.ViewModels
             for (int i = 0; i < newItems.Count; i++)
             {
                 Items.Add(new PublicationSummaryDto(i+1, newItems[i]));
-                Debug.WriteLine("🎂" +newItems[i].Title);
             }
             return newItems;
         }
