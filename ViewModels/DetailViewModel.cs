@@ -4,26 +4,11 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using DdadduBot.Service;
+using NPOI.OpenXmlFormats.Dml.Chart;
 using ScraperDll.Entity;
 
 namespace DdadduBot.ViewModels
 {
-    public class PublicationSummaryDto
-    {
-        public int Number { get; set; }
-        public string Status { get; set; }
-        public PublicationSummary PublicationSummary { get; set; }
-
-        public PublicationSummaryDto() { }
-
-        public PublicationSummaryDto(int number, PublicationSummary publication) 
-        { 
-            Number = number;
-            Status = "";
-            PublicationSummary = publication;
-        }
-    }
-
     public class DetailViewModel : INotifyPropertyChanged
     {
         private static readonly Dictionary<(bool, int), DetailViewModel> _instances = new();
@@ -88,19 +73,19 @@ namespace DdadduBot.ViewModels
             IsRunning = true;
             // 1. 리스트 로드
             StatusMessage = "목록을 가져오는 중";
-            var summaries = await LoadItems();
+            await LoadItems();
 
             // 2. 중복 확인 (서버 연동)
             StatusMessage = "목록을 확인하는 중";
-            await _apiRequestService.ValidatePublications(Items);
-
+            var (success, summaries) = await _apiRequestService.ValidatePublications(Items);
+            
             // 3. 상품디테일 가져오기
             StatusMessage = "상세 정보를 가져오는 중";
             var publications = await _scraperService.GetPublications(summaries);
 
             // 4. 사진 확장자 변경 (서버 연동)
             StatusMessage = "사진 확장자를 변경하는 중";
-            var success = await _apiRequestService.UpdateMainImageUrls(publications);
+            success = await _apiRequestService.UpdateMainImageUrls(publications);
             if (!success)
             {
                 StatusMessage = "오류 발생 🙊 ";
@@ -116,7 +101,7 @@ namespace DdadduBot.ViewModels
             IsRunning = false;
         }
 
-        private async Task<List<PublicationSummary>> LoadItems()
+        private async Task LoadItems()
         {
             Items.Clear();
             var newItems = await GetNewItems();
@@ -124,7 +109,6 @@ namespace DdadduBot.ViewModels
             {
                 Items.Add(new PublicationSummaryDto(i+1, newItems[i]));
             }
-            return newItems;
         }
 
         private async Task<List<PublicationSummary>> GetNewItems()
