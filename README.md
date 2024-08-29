@@ -49,8 +49,7 @@ e-hon의 메인이미지는 avif 형식이었지만 네이버 스토어에서 av
 [![default.png](https://i.postimg.cc/9QFDF9JH/default.png)](https://postimg.cc/6ygWMykM)
 
 
-자세한 서버 이야기는 요기서 만나보시죠!
-[DdadduServer 깃허브](https://github.com/ssongone/DdadduServer)
+코드는 여기에서 확인할 수 있습니다. [DdadduServer 깃허브](https://github.com/ssongone/DdadduServer)
 
 
 ### 4. 중복 확인 & 필터링
